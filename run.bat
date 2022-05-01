@@ -1,1 +1,1 @@
-nim r -d:release --opt:speed src/cP.nim
+nim r -d:nolapack src/dibujarperfil.nim

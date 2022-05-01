@@ -83,7 +83,7 @@ proc cargarReynolds(path: string): DatosParaRe =
                 let angulo = float(grados)
                 datos.add(cargarDatosParaA(subpath, angulo))
         else: discard
-    return (Reynolds: re, Datos: datos, Vel: vel)
+    return (Reynolds: re, Datos: datos)
 
 
 
