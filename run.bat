@@ -1,0 +1,1 @@
+nim r -d:release --opt:speed src/cP.nim
