@@ -3,10 +3,18 @@ import std/strutils
 import std/strscans
 import os
 
+# Datos experimentales:
 # Temperatura (K)
 let T = 296.85
 # Presion (Pa)
 let P = 91900
+# Longitud (m)
+let L = 0.25
+# Viscosidad (kg m^-1 s^-1)
+let mu = 1.8e-5
+# Densidad (kg m^-3)
+let rho = 1.079
+
 
 # Set de datos para un alfa dado
 type DatosParaA = tuple
@@ -75,7 +83,7 @@ proc cargarReynolds(path: string): DatosParaRe =
                 let angulo = float(grados)
                 datos.add(cargarDatosParaA(subpath, angulo))
         else: discard
-    return (Reynolds: re, Datos: datos)
+    return (Reynolds: re, Datos: datos, Vel: vel)
 
 
 
