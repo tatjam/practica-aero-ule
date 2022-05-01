@@ -1,6 +1,7 @@
 import std/parsecsv
 import std/strutils
 import std/strscans
+import std/algorithm
 import os
 
 # Datos experimentales:
@@ -19,8 +20,7 @@ let rho = 1.079
 # Set de datos para un alfa dado
 type DatosParaA = tuple
     Angulo: float
-    # Media de las presiones relativas respecto a la presión dada por el tubo pitot
-    # que asumimos como valor 0
+    # Valores de cP calculados con la formula desarrollada
     Datos: array[30, float]
 
 # Set de datos para un Re dado
@@ -54,9 +54,11 @@ proc cargarDatosParaA(path: string, angulo: float): DatosParaA =
         tiempos.add(texacto)
         tiempos[tiempos.len - 1] -= tiempos[0]
         for i in 0..29:
-            # Calculamos ya directamente la presio "0" y la restamos
-            let pitot = parseFloat(limpiarLinea(p.row[38]))
-            datos[i] += parseFloat(limpiarLinea(p.row[7 + i])) - pitot
+            # Calculamos ya directamente cP
+            let P0 = parseFloat(limpiarLinea(p.row[38]))
+            let Pinf = parseFloat(limpiarLinea(p.row[37]))
+            let Pi = parseFloat(limpiarLinea(p.row[7 + i]))
+            datos[i] += 1 - (P0 - Pi) / (P0 - Pinf)
         numdatos += 1
         
     for i in 0..29:
@@ -83,6 +85,10 @@ proc cargarReynolds(path: string): DatosParaRe =
                 let angulo = float(grados)
                 datos.add(cargarDatosParaA(subpath, angulo))
         else: discard
+
+    # Ahora ordenamos los datos por angulo
+    proc comp(x, y: DatosParaA): int = cmp(x.Angulo, y.Angulo)
+    datos.sort(comp)
     return (Reynolds: re, Datos: datos)
 
 

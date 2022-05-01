@@ -33,8 +33,6 @@ for i in 0..29:
     else:
         yc[i] = -thickness 
     
-echo xc
-echo yc
 # La funcion permite iterar sobre los puntos del perfil teniendo en cuenta la geometria,
 # por lo tanto, primero se itera intrados, luego extrados y se mantienen correctos los puntos
 # anterior, actual y siguiente
