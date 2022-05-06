@@ -8,5 +8,7 @@ nimble install ggplotnim
 nimble install mpfit
 ```
 
+Los ficheros en datos_xfoil fueron producidos utilizando el software [XFOIL](http://web.mit.edu/drela/Public/web/xfoil/)
+
 ## Uso:
 

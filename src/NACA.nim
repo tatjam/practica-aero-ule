@@ -33,29 +33,3 @@ for i in 0..29:
     else:
         yc[i] = -thickness 
     
-# La funcion permite iterar sobre los puntos del perfil teniendo en cuenta la geometria,
-# por lo tanto, primero se itera intrados, luego extrados y se mantienen correctos los puntos
-# anterior, actual y siguiente
-type FuncIteradora = (proc(ant: int, act: int, sig: int))
-type TipoIteracion = enum intrados, extrados, ambos
-proc iterarPerfil(fnc: FuncIteradora, it: TipoIteracion) =
-    var min_i: int
-    var max_i: int
-
-    if it == intrados:
-        min_i = 15
-        max_i = 29
-    elif it == extrados:
-        min_i = 1
-        max_i = 14
-    else:
-        min_i = 1
-        max_i = 29
-
-    for i in min_i..max_i:
-        let ant = i - 1 
-        var sig = i + 1 
-        if i == 29 or i == 14:
-            sig = -1 
-        fnc(ant, i, sig)
-    
