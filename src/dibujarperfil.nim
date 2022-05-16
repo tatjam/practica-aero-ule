@@ -30,4 +30,4 @@ ggplot(df) +
     geom_text(aes(x="xuc", y="yuc", text="ucid"), size=3.0) + 
     geom_text(aes(x="xlc", y="ylc", text="lcid"), size=3.0) + 
     ylim(-0.2, 0.2) +
-    ggsave("resultados/NACA.tex", height = 200, standalone=true)
+    ggsave("resultados/NACA.tex", height = 200, onlyTikZ=true)

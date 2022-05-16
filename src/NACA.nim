@@ -19,6 +19,7 @@ var xc: array[30, float]
 for i in 0..29:
     xc[i] = float(x[i]) / cuerda
 
+
 # Ahora generamos las coordenadas y de cada punto, adimensionalizada también
 var yc: array[30, float]
 for i in 0..29:
@@ -33,3 +34,4 @@ for i in 0..29:
     else:
         yc[i] = -thickness 
     
+echo xc, yc

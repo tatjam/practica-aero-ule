@@ -15,12 +15,38 @@ for datosRe in datos:
         # Generamos el nombre de fichero
         let reInt = int(datosRe.Reynolds)
         let aInt = int(datosA.Angulo)
-        let name = fmt"resultados/cP/cP_{reInt}_{aInt}.tex"
+        let nameextra = fmt"resultados/cP/cP_{reInt}_{aInt}_extra.tex"
 
-        let df = seqsToDf({"$x_c$": xc[0..14], "$cP$": datosA.Datos[0..14]})
-        ggplot(df, aes("$x_c$", "$cP$")) + 
-            geom_line() + 
-            ggsave(name, standalone=true)
+        var sup: array[30, float]
+        var inf: array[30, float]
+
+        # +- 1 desviacion tipica
+        for i in 0..29:
+            sup[i] = datosA.Datos[i] + math.sqrt(datosA.Varianzas[i])
+            inf[i] = datosA.Datos[i] - math.sqrt(datosA.Varianzas[i])
+
+        let dfextra = seqsToDf({"$x_c$": xc[0..14], "$c_p$": datosA.Datos[0..14],
+        "$c_p^X$": datosA.XFOIL_Datos[0..14], "vars": sup[0..14], "vari": inf[0..14]})
+    
+        ggplot(dfextra) + 
+            geom_line(aes("$x_c$", "$c_p$")) + 
+            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5)) + 
+            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5)) + 
+            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
+            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
+            ggsave(nameextra, onlyTikZ=true)
+        
+        let nameintra = fmt"resultados/cP/cP_{reInt}_{aInt}_intra.tex"
+
+        let dfintra = seqsToDf({"$x_c$": xc[15..29], "$c_p$": datosA.Datos[15..29],
+        "$c_p^X$": datosA.XFOIL_Datos[15..29], "vars": sup[15..29], "vari": inf[15..29]})
+        
+        ggplot(dfintra) + 
+            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5)) + 
+            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5)) + 
+            geom_line(aes("$x_c$", "$c_p$")) + 
+            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
+            ggsave(nameintra, onlyTikZ=true)
 
         
 # Elaboramos tambien un "ridgemap" tanto de intra como extrados:
@@ -43,7 +69,7 @@ for datosRe in datos:
         geom_line(aes("x", "y")) +
         xlab("$x_c$") + 
         ylab("$c_p$") +
-        ggsave(fmt"resultados/cP/cPridge_{reInt}_intra.tex", standalone=true)
+        ggsave(fmt"resultados/cP/cPridge_{reInt}_intra.tex", onlyTikZ=true)
 
 # Elaboramos tambien un "ridgemap" tanto de intra como extrados:
 for datosRe in datos:
@@ -65,4 +91,4 @@ for datosRe in datos:
         geom_line(aes("x", "y")) +
         xlab("$x_c$") + 
         ylab("$c_p$") +
-        ggsave(fmt"resultados/cP/cPridge_{reInt}_extra.tex", standalone=true)
+        ggsave(fmt"resultados/cP/cPridge_{reInt}_extra.tex", onlyTikZ=true)

@@ -1,1 +1,1 @@
-nim r -d:nolapack src/cLcD.nim
+nim r -d:nolapack src/dibujarperfil.nim

@@ -15,11 +15,367 @@ sorting=ynt
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{hyperref}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{unicode-math}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{tikz}
 
 \usepackage[spanish]{babel}
 
+\title{Estudio del perfil NACA 1018}
+\author{José Antonio Mayo García}
+
 \begin{document}
 
-    Hola!
+\maketitle
+
+\tableofcontents
+
+\section{Introducción}
+
+El ensayo mediante túneles de viento remonta a los origenes de la aviación, siendo su utilización fundamental para el diseño
+y estudio de vehículos aereos, y tremendamente útiles a la hora de estudiar el comportamiento aerodinámico de automóviles,
+edificios, o cualquier tipo de dispositivo en contacto con el aire.
+
+\section{Objetivos}
+
+\section{Metodología}
+
+\subsection{Tunel de viento}
+
+Se utilizó un perfil elaborado en madera, en cuya superficie 30 orificios se conectaban, mediante tubos flexibles, 
+con el dispositivo \textit{DTC Initium}, ocupado de registrar las presiones. El perfil se situa sobre una plataforma giratoria que se 
+adaptó en el interior de la cámara de ensayo del túnel de viento mediante una abertura en la pared de este. Dentro de la cámara,
+alejado del perfil, se encuentra un tubo de pitot con dos tomas de presión adicionales.
+
+El tunel de viento, de tipo cerrado, consiste en una serie de tubos rectangulares de madera a través de los cuales fluye el aire.
+El tunel tiene una longitud total de $8,5m$, mientras que la cámara de ensayo tiene una longitud de $1,4m$. Siguiendo la dirección
+del aire, antes de la cámara de ensayo nos encontramos una suave reducción de sección, desde $0,863m^2$ hasta $0,179m^2$ 
+a lo largo de $2,37m$, con el fin de aumentar la velocidad del aire. Tras superar la cámara de ensayo, el tunel se expande
+hasta una sección de $1.169m^2$ de forma relativamente brusca. 
+
+Se consigue el movimiento del aire gracias a la utilización de un ventilador, cuya velocidad de rotación se puede ajustar
+para conseguir la velocidad del aire deseada para el ensayo.
+
+\subsection{Adquisición de datos}
+
+En cuanto a la adquisición de datos, el \textit{DTC Initium} utiliza una pareja de microprocesadores, uno ocupado de establecer
+comunicaciones con la red para transmitir los datos a un ordenador, y otro ocupado de muestrear los diferentes sensores. 
+Para el muestreo se utiliza un conversor analógico-digital de 18 bits. 
+
+Los datos son recibidos en el ordenador a través del software \textit{DTC Initium Utility Software} y almacenados en un fichero
+CSV (\textit{Comma separated values}). 
+
+Para la simulación teórica, se utilizó el software \textit{X-FOIL}, disponible en \url{http://web.mit.edu/drela/Public/web/xfoil/}.
+En particular, para la obtención de la distribución de presiones se exportaron los ficheros utilizando el comando
+%\verbatin{CPWR}. Para la obtención de la relación entre los coeficientes aerodinámicos y el ángulo de ataque se 
+%copiaron manualmente los datos a el fichero generado por \verbatim{CPWR}.
+
+\subsection{Desarrollo Teórico}
+
+\subsubsection{Perfil NACA}
+
+Primero de todo, definamos un sistema de coordenadas en el que trabajar. Denominaremos al eje $x$ el eje longitudinal
+del perfil, y al eje $y$ el perpendicular a este en dirección del extrados. Se define la cuerda $b$ como la longitud total
+de un perfil, y, con interés de adimensionalizar, definiremos $x_c = \frac{x}{b}$ y $y_c = \frac{y}{b}$.
+
+Un perfil cualquiera (siempre que sea una función con dos valores de $y$ para un $x$ dado), por lo tanto, se podrá definir 
+con las dos curvas:
+
+$$y_c = c(x_c) \pm t(x_c)$$
+
+Se denomina a $c(x_c)$ la línea de curvatura del perfil y a $t(x_c)$ el grosor de este. 
+
+Los dos primeros dígitos de la nomenclatura NACA nos indican las características de la línea de curvatura. En el caso del perfil
+NACA 0018, la línea de curvatura es nula, es decir, $c(x_c) = 0$, y por lo tanto estaremos ante un perfil simétrico:
+
+$$y_c = \pm t(x_c)$$
+
+Ahora, el tercer y cuarto dígitos del perfil NACA nos indica, en porcentaje, cual es el grosor máximo del perfil respecto
+a la cuerda. Finalmente, los perfiles NACA respetan la siguiente fórmula para $t(x_c)$, siendo $t_m$ los
+dos últimos dígitos del perfil NACA divididos entre $100$.
+
+$$t(x_c) = 5 t_m (0.29690 \sqrt{x} - 0.12600 x - 0.35160 x^2 + 0.28430 x^3 - 0.10150 x^4)$$
+
+Es importante añadir que no hemos impuesto al perfil que sea cerrado en su parte trasera. 
+Es decir, si graficamos las curvas del perfil, nos encontraremos que en el borde de salida existe un pequeño hueco. 
+En la realidad, esta discontinuidad se rellena mediante una circunferencia. \cite{Jacobs1932TheCO}
+
+\subsubsection{Cálculo de coeficientes}
+
+Tras el ensayo en el túnel de viento, tendremos una serie de valores de la presión en algunos puntos del perfil.
+
+\paragraph{Coeficiente de Presión}
+
+Se define como:
+
+$$c_P = \frac{P - P_{\infty}}{\frac{1}{2}\rho_{\infty} U^2_{\infty}}$$
+
+Ahora, por Bernoulli, siendo $P_0$ la presión de estancamiento, en la que la velocidad del fluido es 0:
+
+$$P_{\infty} + \frac{1}{2} \rho_{\infty} U^2_{\infty} = P_0$$
+
+Entonces:
+
+$$c_P = \frac{P - P_{\infty}}{P_0 - P_{\infty}}$$
+
+Observamos que los valores de $P_0$ y $P_{\infty}$ se pueden obtener del tubo de pitot, mientras que el valor de
+$P$ se obtendrá gracias a la media de las presiones medidas en cada punto del perfil.
+
+\paragraph{Coeficientes de fuerzas netas}
+
+De los valores de presión podemos obtener la fuerza neta en los dos ejes fundamentales del perfil realizando una integral
+de linea a lo largo de la superficie del perfil. Siendo $\vec{dN}$ el vector normal al perfil en cada punto que apunta hacía
+el exterior del perfil:
+
+$$\vec{F} = - \oint P(x, y) \vec{dN}$$ 
+
+Ya que no estamos ante una expresión analítica de $P(x, y)$, sino ante una serie de datos puntuales, resulta necesario realizar
+una simplificación de la superficie en una serie de segmentos rectos. Existe una gran variedad de maneras de situar estos 
+segmentos, pero se ha decidido utilizar segmentos que empiezan y acaban en los puntos de muestreo de presión, como se puede 
+observar en la figura \ref{fig:NACA}
+
+\begin{figure}[h!]
+    \input{../resultados/NACA.tex}
+    \caption{Situación de las tomas de presión y segmentos utilizados para los cálculos. Los índices comienzan en 1,
+    aunque en el código se utilizan indices basados en 0.}
+    \label{fig:NACA}    
+\end{figure}
+
+Asumiendo que la presión varia de forma lineal entre una toma y otra, podemos afirmar que en la mitad del segmento la presión 
+será: $P_{a, b} = \frac{1}{2}(P_{a} + P_{b})$. Ahora, podemos obtener el vector dirección de cada segmento de la 
+siguiente forma:
+
+$$\vec{S_{a,b}} = (x_{a} - x_{b}, y_{a} - y_{b})$$
+
+Por lo tanto, el vector normal será, siendo $S_x$ y $S_y$ las componentes respectivas del vector $\vec{S_{a,b}}$:
+
+$$\vec{N_{a, b}} = (-S_y, S_x)$$
+
+Observamos que para los segmentos del intradós el vector normal apunta hacía el interior del perfil. Este hecho se tendrá
+en cuenta a la hora de sumar las diferentes fuerzas resultantes. Además, se ha de tener cuidado en $i=16$, ya que existe 
+una \say{discontinuidad} entre intradós y extrados. Por lo tanto:
+
+$$\vec{F} = 
+\sum_{i = 2}^{15} \vec{N_{i, i-1}} P_{i, i-1} - 
+\sum_{i=17}^{30} \vec{N_{i, i-1}} P_{i, i-1} -
+\vec{N_{16, 1}} P_{16, 1} $$
+
+Ahora, adimensionalizando la presión, y los vectores normales, obtenemos la expresión que se utiliza en los cálculos:
+
+$$\vec{c_F} = \sum_{i = 2}^{15} \frac{\vec{N_{i, i-1}}}{b} {c_P}_{i, i-1} - 
+\sum_{i=17}^{30} \frac{\vec{N_{i, i-1}}}{b} {c_P}_{i, i-1} -
+\frac{\vec{N_{16, 1}}}{b} {c_P}_{16, 1} $$
+
+Finalmente, podemos obtener los coeficientes en el eje $x$ e $y$:
+
+$$c_x = {c_F}_x, \quad c_y = {c_F}_y$$
+
+\paragraph{Coeficiente de Sustentación}
+
+Se define como:
+
+$$c_l = \frac{l}{\frac{1}{2} \rho_{\infty} U_{\infty}^2 b}$$
+
+Siendo $l$ la fuerza de sustentación generada, y $b$ la cuerda. Observamos que, sí $\alpha$ es el ángulo de ataque, por la 
+definición de sustentación:
+
+$$c_l = c_y sin(\alpha) + c_x cos(\alpha)$$
+
+Observamos que el denominador adimensionalizador está ya incluido en $c_x$ y $c_y$. 
+
+\paragraph{Coeficiente de resistencia}
+
+Se define como:
+
+$$c_d = \frac{d}{\frac{1}{2} \rho_{\infty} U_{\infty}^2 b}$$
+
+De igual forma que antes, obtenemos su expresión final. Ahora es importante ser cuidadoso con la orientación de los ejes,
+recordemos, como se puede ver en la figura \ref{fig:NACA}, que el eje $x$ coincide con el drag para $\alpha=0$, y
+el eje $y$ coincidirá con el drag para $\alpha=270\deg$, con lo que:
+
+$$c_d = c_x cos(\alpha) - c_y sin(\alpha)$$
+
+\paragraph{Coeficiente de momentos}
+
+En particular, se va a desarrollar el coeficiente de momentos respecto al borde de ataque:
+
+\subsubsection{Determinación de incertidumbres}
+
+Se consideran incertidumbres aquellas diferencias entre el valor observado de una variable y el valor real que la variable 
+tomó en ese momento. Evidentemente, es imposible obtener un valor exacto del error, ya que esto implicaría
+conocer la variable original (y por lo tanto no tendríamos error alguno), pero si se pueden ofrecer una serie de cotas.
+
+Para realizar un desarrollo intermedio entre la rigurosidad matemática y la práctica, no se vá a entrar en detalle
+en el origen de los conceptos utilizados. El desarrollo se basa fundamentalmente en el libro \cite{errores}.
+
+Cuando hablamos en el escrito de un porcentaje de error, estamos ante un error relativo. 
+Es decir, si consideramos a $v$ el valor medido, a $b$ el valor real y a $e$ el error:
+
+$$b \in [v (1 + e), v (1 - e)]$$
+
+Por otra parte, si se dá un error con unidades, estamos hablando de un error absoluto:
+
+$$b \in [v + e, v - e]$$
+
+En cuanto a la propagación de errores, está resulta bastante engorrosa de escribir de forma completa,
+aunque su implementación es relativamente fácil. De todas formas, se ha presentado la cantidad necesaria de 
+desarrollo como para justificar los cálculos realizados en el código.
+
+\paragraph{Error humano}
+La primera fuente de errores que debemos tener en cuenta es el error humano a la hora de ajustar el ángulo de 
+ataque del perfil. Es complicado ofrecer un valor apropiado, ya que varias personas nos ocupamos de ajustar el perfil, 
+pero es de esperar un error del orden de $\pm 1\deg$, que utilizaremos de ahora en adelante.
+
+Otra fuente de error humano es el ajuste del número de Reynolds. El ajuste se realizó observando la velocidad indicada 
+por el tubo de pitot hasta que se obtuvieron valores relativamente cercanos a la velocidad deseada, que no se anotaron.
+De nuevo, tan solo se puede ofrecer gracias a la intuición una cota para el error. Tomaremos un valor del $5\%$.
+
+\paragraph{Sensor de presiones}
+
+Otra fuente de incertidumbre es el sensor de presiones.
+
+En la especificación técnica del aparato se dá un valor máximo del error de $0.25\%$ en condiciones estáticas. Este es el valor 
+que utilizaremos para ponernos en el peor caso posible del sensor. 
+En cuanto a los errores por la digitalización de las señales, 
+estos resultan insignificantes ya que se utiliza un conversor analógico-digital de 18 bits, que ofrece $2^18$ posibles valores 
+para la señal. Aunque no se detalla en profundidad en la ficha técnica del dispositivo, parece ser que los sensores operan 
+en un rango de $24V$, con lo cual el error debido a la digitalización sería del orden de:
+
+$$\frac{\frac{24V}{2^{18}}}{24V} \simeq 3 \cdot 10^{-4}\%$$
+
+Observamos que es un valor muy pequeño comparado con el error de los propios sensores, y por lo tanto lo ignoramos. También
+es un error insignificante la operación con números de punto flotante en el programa ya que se utilizan números de 64 bits 
+cuyo error resulta totalmente minúsculo en este experimento.
+
+
+\paragraph{Media de los valores de presión}
+
+Ya que tenemos $N$ valores de presión para cada punto, resulta apropiado realizar la media aritmética ($\mu$) para así obtener 
+un solo valor con el que trabajar:
+
+$$\mu = \frac{\sum P_n}{N}$$
+
+En esta operación se deberían eliminar errores originados a lo largo del tiempo ya que 
+es natural esperar que existan en igual proporción a un lado del valor medio como al otro. De todas formas, se puede cuantificar 
+la variación respecto a la media calculando la varianza:
+
+$$Var = \frac{\sum (P_n - \mu)^2}{N}$$
+
+Además, se define la desviación típica como:
+
+$$\sigma = \sqrt{Var}$$
+
+Este valor nos dará una idea de lo que varian los valores medidos respecto a la media, debido a errores del sensor y a 
+las propias fluctuaciones del fluido. Ya que cualquier medida del sensor podría ser la real, utilizando la varianza podemos 
+obtener un intervalo de confianza dentro del cual deberá estar el valor de la presión real.
+
+Además, el sensor tiene un error estático, como ya detallamos antes, que también se debe tener en cuenta. Este error se refiere
+a un desvío, constante, respecto al valor real. Por lo tanto, no afectará a la varianza, ya que todos los valores deberian verse 
+desplazados en la misma cantidad. (Se trata de un error de centrado).
+
+\paragraph{Cálculo de $c_P$}
+
+Recordemos de antes que:
+
+$$c_P = \frac{P - P_{\infty}}{P_0 - P_{\infty}}$$
+
+La varianza de $c_P$ se puede obtener utilizando la teoría de propagación de errores, y asumiendo que no existe correlación
+entre los errores de una y otra medida. Obtenemos una expresión bastante larga:
+
+$$Var(c_P) = c_P^2 \left[ \left(\frac{Var(P) + Var(P_{\infty})}{P - P_{\infty}}\right)^2 +
+ \left(\frac{Var(P_0) + Var(P_{\infty})}{P_0 - P_{\infty}}\right)^2\right]$$ 
+
+\paragraph{Cálculo de $c_l$ y $c_d$}
+
+Primero de todo, se obtienen los valores de $c_P$ medios para cada segmento. La propagación de error en este proceso no es más que:
+
+$$Var({c_P}_{a,b}) = \frac{Var({c_P}_a) + Var({c_P}_b)}{4}$$
+
+Ahora, el error a la hora de calcular los coeficientes de fuerza es prácticamente igual al propio cálculo de estos. 
+Se obtiene un vector que contiene la varianza en el eje x, y en el eje y:
+
+$$\vec{Var(c_F)} = \sum_{i = 2}^{15} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) - 
+\sum_{i=17}^{30} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) -
+\left(\frac{\vec{N_{16, 1}}}{b}\right)^2 Var({c_P}_{16, 1}) $$
+
+Ahora, partiendo de la definición que damos de $c_l$ y $c_d$, y asumiendo $\alpha$ pequeño, se puede obtener que:
+
+$$Var(sin(\alpha)) = cos^2(\alpha) Var(\alpha) \simeq \alpha^2 Var(\alpha)$$
+$$Var(cos(\alpha)) = sin^2(\alpha) Var(\alpha) \simeq Var(\alpha)$$
+$$Var(c_l) = 
+c_y sin(\alpha) \left[\left(\frac{Var(c_y)}{c_y}\right)^2 + \left(\frac{Var(sin(\alpha))}{sin(\alpha)}\right)^2\right]
++ 
+c_x cos(\alpha) \left[\left(\frac{Var(c_x)}{c_x}\right)^2 + \left(\frac{Var(cos(\alpha))}{cos(\alpha)}\right)^2\right]
+$$
+$$Var(c_d) = 
+c_x sin(\alpha)\left[\left(\frac{Var(c_x)}{c_x}\right)^2 + \left(\frac{Var(sin(\alpha))}{sin(\alpha)}\right)^2\right]
++ 
+c_y cos(\alpha)\left[\left(\frac{Var(c_y)}{c_y}\right)^2 + \left(\frac{Var(cos(\alpha))}{cos(\alpha)}\right)^2\right]
+$$
+
+Recordemos que estimamos que se cometió un error \say{maximo} de $1\deg$ a la hora de ajustar el ángulo de ataque. Consideremos 
+que el ajuste de $\alpha$ sigue una distribución normal, y que hay un $95\%$ de probabilidades de que $\alpha$ no esté equivocado
+en más de $1\deg$: En este caso, sin entrar en el desarrollo matemático, 
+la desviación típica será de $0.5\deg$, por lo tanto la varianza de $\alpha$ será de $0.25\deg^2$. Este es el valor de 
+$Var(\alpha)$ que tomamos para el desarrollo anterior en el código.
+
+\paragraph{Cálculo de $c_m$}
+
+
+\subsection{Implementación en Software}
+
+Se implementó un software en el lenguaje de programación \textit{Nim} ocupado de cargar los datos, realizar los cálculos
+necesarios y finalmente presentarlos en una serie de gráficas. El código fuente está disponible en 
+\url{https://github.com/tatjam/practica-aero-ule}. Se utilizó la libreria \textit{ggplotnim} para la elaboración
+de los gráficos.
+
+En todo momento se han utilizado números de punto flotante de 64 bits para la realización de los cálculos.
+
+\section{Resultados}
+
+\subsection{Exposición resultados}
+
+\subsection{Minimos cuadrados}
+
+\section{Discusión}
+
+\subsection{Eficiencias}
+
+\subsection{Análisis}
+
+\subsection{Posibles mejoras}
+
+Una de las partes más débiles del trabajo es la parte de errores. Se trata de un temario en el que nunca hemos entrado 
+en detalle, y es posible que contenga una serie de errores conceptuales. Como es común en los experimentos científicos, se ha
+obtenido un gran grado de error. Sí se repitiese el experimento, sería fundamental ser mucho más cuidadoso a la hora de ajustar 
+los ángulos de ataque, que tienen una gran repercusión sobre la forma final de las curvas. 
+
+
+
+\section{Conclusiones}
+
+
+\subsection{Visión personal}
+
+El trabajo no solo ha servido como una primera experiencia con un túnel de viento, sino que ha sido una introducción al mundo
+de la investigación aeroespacial. En un primer lugar, se ha permitido una gran libertada la hora de realizar los cálculos. 
+En parte, esta libertad ha creado una incertidumbre, que supongo estará también presente en la investigación real. Por otra parte,
+ha permitido explorar las diferentes herramientas disponibles para este tipo de trabajos. 
+
+También es importante añadir el choque que supone que los resultados experimentales coincidan muy mal con los resultados 
+teóricos ofrecidos por X-Foil. Esta diferencia hace muy clara la necesidad de túneles de viento ámplios, 
+además de un protocolo riguroso y estricto a la hora de preparar los experimentos y tomar los datos.
+
+%\input{../resultados/cP/cP_200000_10_extra.tex}
+%\input{../resultados/cP/cP_200000_10_intra.tex}
+%\input{../resultados/cLcD/cL_200000.0.tex}
+%\input{../resultados/cLcD/cD_200000.0.tex}
+
+\printbibliography
 
 \end{document}
