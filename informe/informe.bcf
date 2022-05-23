@@ -2348,10 +2348,25 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">./biblio.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">Jacobs1932TheCO</bcf:citekey>
-    <bcf:citekey order="2">errores</bcf:citekey>
-    <bcf:citekey order="3">Jacobs1932TheCO</bcf:citekey>
+    <bcf:citekey order="1">Barlow1999-wm</bcf:citekey>
+    <bcf:citekey order="2">Jacobs1932TheCO</bcf:citekey>
+    <bcf:citekey order="3">xfoil</bcf:citekey>
     <bcf:citekey order="4">errores</bcf:citekey>
+    <bcf:citekey order="5">Anderson</bcf:citekey>
+    <bcf:citekey order="6">Tritton1988-ei</bcf:citekey>
+    <bcf:citekey order="7">Derbunovich1987</bcf:citekey>
+    <bcf:citekey order="8">Tritton1988-ei</bcf:citekey>
+    <bcf:citekey order="9">Tritton1988-ei</bcf:citekey>
+    <bcf:citekey order="10">Tritton1988-ei</bcf:citekey>
+    <bcf:citekey order="11">Barlow1999-wm</bcf:citekey>
+    <bcf:citekey order="12">Barlow1999-wm</bcf:citekey>
+    <bcf:citekey order="13">Barlow1999-wm</bcf:citekey>
+    <bcf:citekey order="14">Jacobs1932TheCO</bcf:citekey>
+    <bcf:citekey order="15">xfoil</bcf:citekey>
+    <bcf:citekey order="16">errores</bcf:citekey>
+    <bcf:citekey order="17">Anderson</bcf:citekey>
+    <bcf:citekey order="18">Tritton1988-ei</bcf:citekey>
+    <bcf:citekey order="19">Derbunovich1987</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="ynt">

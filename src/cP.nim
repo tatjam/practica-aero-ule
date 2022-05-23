@@ -20,10 +20,10 @@ for datosRe in datos:
         var sup: array[30, float]
         var inf: array[30, float]
 
-        # +- 1 desviacion tipica
+        # +- 0.5 desviacion tipica
         for i in 0..29:
-            sup[i] = datosA.Datos[i] + math.sqrt(datosA.Varianzas[i])
-            inf[i] = datosA.Datos[i] - math.sqrt(datosA.Varianzas[i])
+            sup[i] = datosA.Datos[i] + 0.25* math.sqrt(datosA.Varianzas[i])
+            inf[i] = datosA.Datos[i] - 0.25*math.sqrt(datosA.Varianzas[i])
 
         let dfextra = seqsToDf({"$x_c$": xc[0..14], "$c_p$": datosA.Datos[0..14],
         "$c_p^X$": datosA.XFOIL_Datos[0..14], "vars": sup[0..14], "vari": inf[0..14]})

@@ -40,24 +40,24 @@ sorting=ynt
 \section{Introducción}
 
 El ensayo mediante túneles de viento remonta a los origenes de la aviación, siendo su utilización fundamental para el diseño
-y estudio de vehículos aereos, y tremendamente útiles a la hora de estudiar el comportamiento aerodinámico de automóviles,
-edificios, o cualquier tipo de dispositivo en contacto con el aire.
+y estudio de vehículos aéreos, y tremendamente útiles a la hora de estudiar el comportamiento aerodinámico de automóviles,
+edificios, o cualquier tipo de dispositivo en contacto con el aire. \cite{Barlow1999-wm}
 
 \section{Objetivos}
 
 \section{Metodología}
 
-\subsection{Tunel de viento}
+\subsection{Túnel de viento}
 
 Se utilizó un perfil elaborado en madera, en cuya superficie 30 orificios se conectaban, mediante tubos flexibles, 
 con el dispositivo \textit{DTC Initium}, ocupado de registrar las presiones. El perfil se situa sobre una plataforma giratoria que se 
 adaptó en el interior de la cámara de ensayo del túnel de viento mediante una abertura en la pared de este. Dentro de la cámara,
 alejado del perfil, se encuentra un tubo de pitot con dos tomas de presión adicionales.
 
-El tunel de viento, de tipo cerrado, consiste en una serie de tubos rectangulares de madera a través de los cuales fluye el aire.
-El tunel tiene una longitud total de $8,5m$, mientras que la cámara de ensayo tiene una longitud de $1,4m$. Siguiendo la dirección
+El túnel de viento, de tipo cerrado, consiste en una serie de tubos rectangulares de madera a través de los cuales fluye el aire.
+El túnel tiene una longitud total de $8,5m$, mientras que la cámara de ensayo tiene una longitud de $1,4m$. Siguiendo la dirección
 del aire, antes de la cámara de ensayo nos encontramos una suave reducción de sección, desde $0,863m^2$ hasta $0,179m^2$ 
-a lo largo de $2,37m$, con el fin de aumentar la velocidad del aire. Tras superar la cámara de ensayo, el tunel se expande
+a lo largo de $2,37m$, con el fin de aumentar la velocidad del aire. Tras superar la cámara de ensayo, el túnel se expande
 hasta una sección de $1.169m^2$ de forma relativamente brusca. 
 
 Se consigue el movimiento del aire gracias a la utilización de un ventilador, cuya velocidad de rotación se puede ajustar
@@ -72,10 +72,10 @@ Para el muestreo se utiliza un conversor analógico-digital de 18 bits.
 Los datos son recibidos en el ordenador a través del software \textit{DTC Initium Utility Software} y almacenados en un fichero
 CSV (\textit{Comma separated values}). 
 
-Para la simulación teórica, se utilizó el software \textit{X-FOIL}, disponible en \url{http://web.mit.edu/drela/Public/web/xfoil/}.
+Para la simulación teórica, se utilizó el software X-Foil, disponible en \url{http://web.mit.edu/drela/Public/web/xfoil/}.
 En particular, para la obtención de la distribución de presiones se exportaron los ficheros utilizando el comando
-%\verbatin{CPWR}. Para la obtención de la relación entre los coeficientes aerodinámicos y el ángulo de ataque se 
-%copiaron manualmente los datos a el fichero generado por \verbatim{CPWR}.
+\verb+CPWR+. Para la obtención de la relación entre los coeficientes aerodinámicos y el ángulo de ataque se 
+copiaron manualmente los datos al fichero generado por \verb+CPWR+.
 
 \subsection{Desarrollo Teórico}
 
@@ -144,7 +144,7 @@ observar en la figura \ref{fig:NACA}
 \begin{figure}[h!]
     \input{../resultados/NACA.tex}
     \caption{Situación de las tomas de presión y segmentos utilizados para los cálculos. Los índices comienzan en 1,
-    aunque en el código se utilizan indices basados en 0.}
+    aunque en el código se utilizan índices basados en 0.}
     \label{fig:NACA}    
 \end{figure}
 
@@ -160,7 +160,7 @@ $$\vec{N_{a, b}} = (-S_y, S_x)$$
 
 Observamos que para los segmentos del intradós el vector normal apunta hacía el interior del perfil. Este hecho se tendrá
 en cuenta a la hora de sumar las diferentes fuerzas resultantes. Además, se ha de tener cuidado en $i=16$, ya que existe 
-una \say{discontinuidad} entre intradós y extrados. Por lo tanto:
+una \say{discontinuidad} entre intradós y extradós, del punto 15 al 16, ya que estos no están conectados (figura \ref{fig:NACA}). Por lo tanto:
 
 $$\vec{F} = 
 \sum_{i = 2}^{15} \vec{N_{i, i-1}} P_{i, i-1} - 
@@ -204,7 +204,38 @@ $$c_d = c_x cos(\alpha) - c_y sin(\alpha)$$
 
 \paragraph{Coeficiente de momentos}
 
-En particular, se va a desarrollar el coeficiente de momentos respecto al borde de ataque:
+Primero de todo, se ha considerado un momento como positivo si este hace que el perfil aumente su ángulo de ataque.
+Además, según el enunciado, debemos calcular los momentos respecto al punto $x_c = \frac{1}{4}$. (X-Foil ya nos dá 
+los datos respecto a este punto \cite{xfoil}).
+
+Se define el momento respecto al punto $x = \frac{1}{4}b$ como:
+
+$$\vec{M} = \oint \vec{dF} \times \vec{r}$$
+
+Siendo $\vec{r}$ el vector que une el punto estudiado con el punto de referencia. Entonces, realizando la aproximación de segmentos
+de igual forma que antes:
+
+$$\vec{M} = 
+\sum_{i = 2}^{15} \vec{N_{i, i-1}} P_{i, i-1} \times \left(\vec{X_{i, i-1}} - (0.25, 0)\right) - 
+\sum_{i=17}^{30} \vec{N_{i, i-1}} P_{i, i-1} \times \left(\vec{X_{i, i-1}} - (0.25, 0)\right) -
+\vec{N_{16, 1}} P_{16, 1} \times \left(\vec{X_{16, 1}} - (0.25, 0)\right)$$
+
+Siendo $\vec{X_{a,b}}$ el vector posición del punto medio del segmento $(a, b)$. Ahora, desarrollando el producto vectorial, 
+expresando el momento como un escalar (ya que trabajamos en dos dimensiones), 
+y tomando directamente la fuerza calculada anteriormente:
+
+\begin{multline*}M = 
+\sum_{i=2}^{15} F_x \left(\frac{y_i + y_{i-1}}{2}\right) -F_y \left(\frac{x_i + x_{i-1}}{2} - 0.25b\right)
+- \sum_{i=17}^{30} F_x \left(\frac{y_i + y_{i-1}}{2}\right) -F_y \left(\frac{x_i + x_{i-1}}{2} - 0.25b\right) \\
+- \left[F_x \left(\frac{y_16 + y_{1}}{2}\right) -F_y \left(\frac{x_{16} + x_{1}}{2} - 0.25b\right)\right]
+\end{multline*}
+
+Se ha omitido el indexado de las fuerzas por no extender innecesariamente la expresión. Finalmente, adimensionalizando:
+
+$$c_m = \frac{M}{\frac{1}{2}\rho U_\infty^2 b^2}$$
+
+Es importante entender, para facilitar la lectura del código, que el adimensionalizado se realiza en la carga de los datos, pero es 
+interesante en el desarrollo hacerlo al final para comprender con que magnitudes dimensionales trabajamos.
 
 \subsubsection{Determinación de incertidumbres}
 
@@ -224,8 +255,9 @@ Por otra parte, si se dá un error con unidades, estamos hablando de un error ab
 
 $$b \in [v + e, v - e]$$
 
-En cuanto a la propagación de errores, está resulta bastante engorrosa de escribir de forma completa,
-aunque su implementación es relativamente fácil. De todas formas, se ha presentado la cantidad necesaria de 
+En cuanto a la propagación de errores, esta resulta bastante engorrosa de escribir de forma completa,
+aunque su implementación es relativamente fácil ya que, en esencia, se trata de aplicar en cadena una serie de
+fórmulas. De todas formas, se ha presentado la cantidad necesaria de 
 desarrollo como para justificar los cálculos realizados en el código.
 
 \paragraph{Error humano}
@@ -241,10 +273,10 @@ De nuevo, tan solo se puede ofrecer gracias a la intuición una cota para el err
 
 Otra fuente de incertidumbre es el sensor de presiones.
 
-En la especificación técnica del aparato se dá un valor máximo del error de $0.25\%$ en condiciones estáticas. Este es el valor 
+En la especificación técnica del aparato se da un valor máximo del error de $0.25\%$ en condiciones estáticas. Este es el valor 
 que utilizaremos para ponernos en el peor caso posible del sensor. 
 En cuanto a los errores por la digitalización de las señales, 
-estos resultan insignificantes ya que se utiliza un conversor analógico-digital de 18 bits, que ofrece $2^18$ posibles valores 
+estos resultan insignificantes ya que se utiliza un conversor analógico-digital de 18 bits, que ofrece $2^{18}$ posibles valores 
 para la señal. Aunque no se detalla en profundidad en la ficha técnica del dispositivo, parece ser que los sensores operan 
 en un rango de $24V$, con lo cual el error debido a la digitalización sería del orden de:
 
@@ -277,7 +309,7 @@ las propias fluctuaciones del fluido. Ya que cualquier medida del sensor podría
 obtener un intervalo de confianza dentro del cual deberá estar el valor de la presión real.
 
 Además, el sensor tiene un error estático, como ya detallamos antes, que también se debe tener en cuenta. Este error se refiere
-a un desvío, constante, respecto al valor real. Por lo tanto, no afectará a la varianza, ya que todos los valores deberian verse 
+a un desvío, constante, respecto al valor real. Por lo tanto, no afectará a la varianza, ya que todos los valores deberían verse 
 desplazados en la misma cantidad. (Se trata de un error de centrado).
 
 \paragraph{Cálculo de $c_P$}
@@ -289,8 +321,8 @@ $$c_P = \frac{P - P_{\infty}}{P_0 - P_{\infty}}$$
 La varianza de $c_P$ se puede obtener utilizando la teoría de propagación de errores, y asumiendo que no existe correlación
 entre los errores de una y otra medida. Obtenemos una expresión bastante larga:
 
-$$Var(c_P) = c_P^2 \left[ \left(\frac{Var(P) + Var(P_{\infty})}{P - P_{\infty}}\right)^2 +
- \left(\frac{Var(P_0) + Var(P_{\infty})}{P_0 - P_{\infty}}\right)^2\right]$$ 
+$$Var(c_P) = c_P^2 \left[ \left(\frac{\sqrt{Var(P)} + \sqrt{Var(P_{\infty})}}{P - P_{\infty}}\right)^2 +
+ \left(\frac{\sqrt{Var(P_0)} + \sqrt{Var(P_{\infty})}}{P_0 - P_{\infty}}\right)^2\right]$$ 
 
 \paragraph{Cálculo de $c_l$ y $c_d$}
 
@@ -301,43 +333,51 @@ $$Var({c_P}_{a,b}) = \frac{Var({c_P}_a) + Var({c_P}_b)}{4}$$
 Ahora, el error a la hora de calcular los coeficientes de fuerza es prácticamente igual al propio cálculo de estos. 
 Se obtiene un vector que contiene la varianza en el eje x, y en el eje y:
 
-$$\vec{Var(c_F)} = \sum_{i = 2}^{15} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) - 
-\sum_{i=17}^{30} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) -
+$$\vec{Var(c_F)} = \sum_{i = 2}^{15} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) + 
+\sum_{i=17}^{30} \left(\frac{\vec{N_{i, i-1}}}{b}\right)^2 Var({c_P}_{i, i-1}) +
 \left(\frac{\vec{N_{16, 1}}}{b}\right)^2 Var({c_P}_{16, 1}) $$
 
 Ahora, partiendo de la definición que damos de $c_l$ y $c_d$, y asumiendo $\alpha$ pequeño, se puede obtener que:
 
-$$Var(sin(\alpha)) = cos^2(\alpha) Var(\alpha) \simeq \alpha^2 Var(\alpha)$$
-$$Var(cos(\alpha)) = sin^2(\alpha) Var(\alpha) \simeq Var(\alpha)$$
+$$Var(sin(\alpha)) = cos^2(\alpha) Var(\alpha) \simeq Var(\alpha)$$
+$$Var(cos(\alpha)) = sin^2(\alpha) Var(\alpha) \simeq \alpha^2Var(\alpha)$$
 $$Var(c_l) = 
-c_y sin(\alpha) \left[\left(\frac{Var(c_y)}{c_y}\right)^2 + \left(\frac{Var(sin(\alpha))}{sin(\alpha)}\right)^2\right]
+c_y^2 \alpha^2 \left[\frac{Var(c_y)}{c_y^2} + \frac{Var(sin(\alpha))}{\alpha^2}\right]
 + 
-c_x cos(\alpha) \left[\left(\frac{Var(c_x)}{c_x}\right)^2 + \left(\frac{Var(cos(\alpha))}{cos(\alpha)}\right)^2\right]
+c_x^2 \left[\frac{Var(c_x)}{c_x^2} + \frac{Var(cos(\alpha))}{1}\right]
 $$
 $$Var(c_d) = 
-c_x sin(\alpha)\left[\left(\frac{Var(c_x)}{c_x}\right)^2 + \left(\frac{Var(sin(\alpha))}{sin(\alpha)}\right)^2\right]
+c_x^2 \alpha^2 \left[\frac{Var(c_x)}{c_x^2} + \frac{Var(sin(\alpha))}{\alpha^2}\right]
 + 
-c_y cos(\alpha)\left[\left(\frac{Var(c_y)}{c_y}\right)^2 + \left(\frac{Var(cos(\alpha))}{cos(\alpha)}\right)^2\right]
+c_y^2 \left[\frac{Var(c_y)}{c_y^2} + \frac{Var(cos(\alpha))}{1}\right]
 $$
 
 Recordemos que estimamos que se cometió un error \say{maximo} de $1\deg$ a la hora de ajustar el ángulo de ataque. Consideremos 
 que el ajuste de $\alpha$ sigue una distribución normal, y que hay un $95\%$ de probabilidades de que $\alpha$ no esté equivocado
 en más de $1\deg$: En este caso, sin entrar en el desarrollo matemático, 
 la desviación típica será de $0.5\deg$, por lo tanto la varianza de $\alpha$ será de $0.25\deg^2$. Este es el valor de 
-$Var(\alpha)$ que tomamos para el desarrollo anterior en el código.
+$Var(\alpha)$ que tomamos para el desarrollo anterior en el código. \footnote{
+    Un detalle que no he sido capaz de solucionar es la propagación del error cuando $\alpha = 0$, ya que surgen divisiones entre
+    cero. He decidido simplemente utilizar un valor muy cercano a 0 para $\alpha$, así aproximando el límite de forma fácil.
+}
 
 \paragraph{Cálculo de $c_m$}
 
-Primero de todo, se ha considerado un momento como positivo si este hace que el perfil aumentar su ángulo de ataque.
-Además, según el enunciado, debemos calcular los momentos respecto al punto $x_c = \frac{1}{4}$. (X-Foil ya nos da 
-los datos respecto a este punto).
+Consideramos que la posición de los sensores no tiene incertidumbre (o es insignificante)
+para simplificar considerablemente el cálculo:
+
+$$Var(c_m) = a Var(c_y) \simeq Var(c_y)$$
+
+La constante $a$ la aproximamos a $1$ ya que, prácticamente, toda la contribución al momento es la ofrecida 
+por las fuerzas en el eje $y$. Un desarrollo más riguroso deberá realizar los mismos pasos que en el paso anterior, aunque 
+se considera un esfuerzo innecesario.
 
 
 \subsection{Implementación en Software}
 
 Se implementó un software en el lenguaje de programación \textit{Nim} ocupado de cargar los datos, realizar los cálculos
 necesarios y finalmente presentarlos en una serie de gráficas. El código fuente está disponible en 
-\url{https://github.com/tatjam/practica-aero-ule}. Se utilizó la libreria \textit{ggplotnim} para la elaboración
+\url{https://github.com/tatjam/practica-aero-ule}. Se utilizó la librería \textit{ggplotnim} para la elaboración
 de los gráficos.
 
 En todo momento se han utilizado números de punto flotante de 64 bits para la realización de los cálculos.
@@ -349,8 +389,12 @@ En todo momento se han utilizado números de punto flotante de 64 bits para la r
 
 \subsubsection{Gráficas \texorpdfstring{$c_P$}{presión} vs \texorpdfstring{$x_c$}{posición}}
 
+\label{cp}
+
 En las siguientes gráficas se presenta en negro los valores de $c_P$, en azul discontinuo los valores de estos 
-predecidos por X-Foil. En gris a puntos está la acotación de errores.
+predecidos por X-Foil. En gris a puntos está la indicación del error, representando el valor $\pm \frac{\sigma}{4}$, es decir,
+los valores más o menos un cuarto de desviación típica. Recordemos que al trabajar con estimaciones muy altas del error, sería poco 
+razonable utilizar un intervalo mayor. Utilizando una cota de error pequeña obtenemos valores razonables. 
 
 \begin{figure}[H]
     \centering
@@ -409,7 +453,8 @@ predecidos por X-Foil. En gris a puntos está la acotación de errores.
 
 Se utiliza el mismo código de colores que antes. Ahora, se presenta en línea roja contínua el ajuste de 
 mínimos cuadrados para cada respectiva función, y en línea verde a punto y raya la curva predecida por la 
-teoría potencial de perfiles finos.
+teoría potencial de perfiles finos. Además, debido a la enorme magnitud de los errores, representamos
+tan solo $\pm \frac{\sigma}{8}$.
 
 Para el ajuste de mínimos cuadrados se ha tomado la totalidad de la curva, ya que no es aparente la 
 aparición de una zona de pérdida como la que se puede ver en los datos del X-Foil. 
@@ -440,7 +485,6 @@ Para $Re = 350000$ tenemos el siguiente ajuste de mínimos cuadrados para el $c_
 
 Estos resultados se comentan en \ref{discus}.
 
-\newpage
 \subsubsection{Gráficas \texorpdfstring{$c_d$}{drag} vs \texorpdfstring{$c_l$}{lift}}
 
 \begin{figure}[H]
@@ -486,7 +530,38 @@ Estos resultados se comentan en \ref{discus}.
 \end{figure}
 \section{Discusión}
 
-\subsection{Eficiencias}
+\subsection{Eficiencia Aerodinámica}
+
+Una de las medidas más directa de la eficiencia aerodinámica es el \textit{Lift-Drag Ratio} \cite{Anderson}:
+
+$$LDR = \frac{c_l}{c_d}$$
+
+Podemos elaborar un gráfico de esta cantidad a ambos números de Reynolds. No se presentan errores, pero de nuevo aparece en azul 
+discontinuo el valor predecido por X-Foil:
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/LDR_200000.0.tex}}
+        \caption{Gráfica del $LDR$ a Reynolds 200000. }
+        \label{fig:res13}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/LDR_350000.0.tex}}
+        \caption{Gráfica del $LDR$ a Reynolds 350000. }
+        \label{fig:res14}     
+    \end{subfigure}
+\end{figure}
+
+El gráfico experimental no resulta muy apropiado debido a que los valores de $c_D$ no coinciden casi en absoluto con 
+los valores predecidos por X-Foil (y valores reales en vuelo). De hecho, en la zona en la que los valores se vuelven negativos,
+obtenemos valores de eficiencia negativos para $\alpha > 0$, que no tienen sentido físico.
+
+Si se puede observar la tendencia general de aumento a medida que aumenta el número de Reynolds. Esta se debe en parte a 
+que, a medida que se separa la capa límite, aumenta enormemente la resistencia de presión. Un flujo turbulento permite una 
+separación más tardía de la capa límite \cite{Tritton1988-ei} y por lo tanto es de esperar que la resistencia aumente 
+más lentamente.
 
 \subsection{Análisis}
 
@@ -537,16 +612,53 @@ para $\alpha$ alrededor de $8\deg$.
 
 \subsubsection{Causa de estas disparidades}
 
+La causa fundamental de estas grandes diferencias entre las predicciones de X-Foil y los datos experimentales es el hecho de 
+que estamos trabajando en un túnel de viento.
 
+Primero de todo, el túnel de viento utilizado no presenta ningún dispositivo acondicionador del flujo. Por lo tanto, es de esperar
+que el flujo de aire sea relativamente inestable. En cuanto a la contracción previa a la cámara de ensayo, está podría tener 
+también un papel vital en las distorsiones que observamos. La contracción es vital a la hora de reducir las turbulencias 
+\cite{Derbunovich1987} y es posible que la de el túnel de viento no sea apropiada. 
+
+La abundancia de turbulencias en la cámara de ensayo parece alinearse con los resultados obtendidos. Por una parte, el perfil 
+tarda mucho más en entrar en pérdida. De hecho, en el ensayo, no es fácil determinar un punto exacto en el que el perfil esté 
+entrando en pérdida (figura \ref{fig:res9}, \ref{fig:res10}). La turbulencia, por lo general, es capaz de retrasar la separación 
+de la capa límite, lo que podría explicar porque no observamos este fenómeno en el ensayo. A su vez, una capa límite turbulenta suele 
+ser bastante más lenta \cite[Capítulo 21.5]{Tritton1988-ei}, y por lo tanto tendríamos una distribución de presiones por debajo de la ideal, lo que parece coincidir 
+con el ensayo (figuras de \ref{cp} como ejemplos).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.7]{captura.png}
+    \caption{Comparación de una capa límite laminar y turbulenta. Fuente: \cite[Capítulo 21.5]{Tritton1988-ei}.}
+    \label{fig:capturon}    
+\end{figure}
+
+Por otra parte, en la cámara de ensayo también debemos ser muy cuidadosos. La cuerda no debería ser superior a 
+$\frac{1}{3}$ de la altura de la cámara \cite{Barlow1999-wm}. Aunque no se tienen medidas exactas, 
+parece ser que la cuerda es menor a este valor. 
+Por otra parte, para evitar el bloqueo de la corriente, el objeto de ensayo debe ser alrededor de un $5\%$ del area 
+de la cámara de ensayo \cite{Barlow1999-wm}. Es posible que se supere este valor, lo que podría dar lugar a alguna interferencia.
+
+De todas formas, sin llevar a cabo un ensayo más detallado tan solo es puede especular sobre el origen de estos errores.
 
 \subsection{Posibles mejoras}
 
-Una de las partes más débiles del trabajo es la parte de errores. Se trata de un temario en el que nunca hemos entrado 
-en detalle, y es posible que contenga una serie de errores conceptuales. Como es común en los experimentos científicos, se ha
-obtenido un gran grado de error. Sí se repitiese el experimento, sería fundamental ser mucho más cuidadoso a la hora de ajustar 
-los ángulos de ataque, que tienen una gran repercusión sobre la forma final de las curvas. 
+Una de las partes más débiles del trabajo es el cálculo de errores. Se trata de un temario en el que nunca hemos entrado 
+en detalle. Se observa que los errores son enormes para todas 
+las gráficas excepto las de $c_p$. Por una parte, esto parece tener sentido ya que se están propagando gran cantidad de errores,
+pero estos errores aparentemente son demasiado grandes. Es posible que exista algún error teórico que esta causando este problema.
 
+Sí se repitiese el experimento, sería fundamental ser mucho más cuidadoso a la hora de ajustar 
+los ángulos de ataque, que tienen una gran repercusión sobre la forma final de las curvas y sobre el error final. 
 
+Otra mejora posible es la utilización de un lenguaje de programación más adaptado al mundo científico, como sería Python o R, o bien 
+la colaboración con la multitud de desarrolladores que están trabajando en convertir Nim en un lenguaje apropiado para 
+el cálculo científico. Por una parte, la librería \verb+ggplotnim+, utilizada para los gráficos, aún no ofrece todas las funcionalidades
+que ofrece \verb+ggplot+ de R. Por otra parte, sería muy útil la utilización de una librería de propagación de errores para 
+simplificar esta parte del trabajo, un buen ejemplo siendo \verb+uncertainties+, disponible para Python y portada a \verb-C++-, o una
+librería equivalente. A día de hoy, no existe ninguna librería de propagación de errores para Nim, aunque se podría utilizar 
+la de \verb-C++- a través de una capa de compatibilidad.
 
 \section{Conclusiones}
 
@@ -556,8 +668,12 @@ En parte, esta libertad ha creado una incertidumbre, que supongo estará tambié
 ha permitido explorar las diferentes herramientas disponibles para este tipo de trabajos. 
 
 También es importante añadir el choque que supone que los resultados experimentales coincidan muy mal con los resultados 
-teóricos ofrecidos por X-Foil. Esta diferencia hace muy clara la necesidad de túneles de viento ámplios, 
+teóricos ofrecidos por X-Foil. Esta diferencia hace muy clara la necesidad de túneles de viento amplios, 
 además de un protocolo riguroso y estricto a la hora de preparar los experimentos y tomar los datos.
+
+Finalmente, la utilización de Nim ha demostrado algunas debilidades en cuanto a su utilización en el mundo científico,
+aunque se compensa gracias a su simple y agradable sintaxis (similar a Python), junto a la poderosa librería estándar y su
+alta velocidad al ser un lenguaje compilado, al contrario de Python o R.
 
 \printbibliography
 

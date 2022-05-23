@@ -3,6 +3,7 @@ import std/strutils
 import std/strscans
 import std/algorithm
 import os
+import std/math
 
 # Datos experimentales:
 # Temperatura (K)
@@ -79,8 +80,13 @@ proc cargarXFoil(path: string): DatosXFoil =
 
 
 proc cargarDatosParaA(path: string, angulo: float): DatosParaA =
-    var todosdatos: seq[array[30, float]]
+    var todosdatos: seq[array[32, float]]
     var datos: array[30, float]
+    var datosPi: array[30, float]
+    var mP0 = 0.0
+    var mPinf = 0.0
+    var varP0 = 0.0 
+    var varPinf = 0.0
     var varianzas: array[30, float]
     for i in 0..29:
         datos[i] = 0.0
@@ -98,29 +104,50 @@ proc cargarDatosParaA(path: string, angulo: float): DatosParaA =
         let texacto = parseFloat(limpiarLinea(p.row[2]))
         tiempos.add(texacto)
         tiempos[tiempos.len - 1] -= tiempos[0]
-        var sub: array[30, float]
+        var sub: array[32, float]
+        # Calculamos ya directamente cP
+        # P de estagnacion + P estatica
+        let P0 = parseFloat(limpiarLinea(p.row[37]))
+        # P estatica
+        let Pinf = parseFloat(limpiarLinea(p.row[38]))
         for i in 0..29:
-            # Calculamos ya directamente cP
-            # P de estagnacion + P estatica
-            let P0 = parseFloat(limpiarLinea(p.row[37]))
-            # P estatica
-            let Pinf = parseFloat(limpiarLinea(p.row[38]))
             # P en el punto de evaluacon
             let Pi = parseFloat(limpiarLinea(p.row[7 + i]))
-            sub[i] = (Pi - Pinf) / (P0 - Pinf) 
-            datos[i] += sub[i]
+            sub[i] = Pi
+            sub[30] = P0
+            sub[31] = Pinf
+            datos[i] += (Pi - Pinf) / (P0 - Pinf) 
+            datosPi[i] += Pi
         numdatos += 1
+        mP0 += P0
+        mPinf += Pinf
         todosdatos.add(sub)
         
     for i in 0..29:
         datos[i] /= float(numdatos)
+        datosPi[i] /= float(numdatos)
+    mP0 /= float(numdatos)
+    mPinf /= float(numdatos)
 
-    # Calculo de la varianza
+    # Calculo de la varianza de P_i
     for sub in todosdatos:
         for i in 0..29:
-            var dev = sub[i] - datos[i]
+            var dev = sub[i] - datosPi[i]
             varianzas[i] += dev * dev
+
+    # Varianza P_0 y P_inf
+    for sub in todosdatos:
+        var devP0 = sub[30] - mP0
+        varP0 += devP0 * devP0
+        var devPinf = sub[31] - mPinf
+        varPinf += devPinf * devPinf
     
+    # Las varianzas de c_p entonces son:
+    for i in 0..29:
+        let a = sqrt(varianzas[i]) + sqrt(varPinf);
+        let b = sqrt(varP0) + sqrt(varPinf);
+        varianzas[i] = datos[i]^2 * ((a / (datosPi[i] - mPinf))^2 + (b / (mP0 - mPinf))^2)
+
     # Corregimos el punto 30 utilizando la presion anterior debido a datos erroneos
     datos[29] = datos[28]
     
