@@ -102,14 +102,12 @@ proc cargarDatosParaA(path: string, angulo: float): DatosParaA =
         for i in 0..29:
             # Calculamos ya directamente cP
             # P de estagnacion + P estatica
-            let Ptot = parseFloat(limpiarLinea(p.row[38]))
+            let P0 = parseFloat(limpiarLinea(p.row[37]))
             # P estatica
-            let Pinf = parseFloat(limpiarLinea(p.row[37]))
-            # P estagnacion
-            let P0 = Ptot - Pinf
-            # P estatica en el punto de evaluacon
+            let Pinf = parseFloat(limpiarLinea(p.row[38]))
+            # P en el punto de evaluacon
             let Pi = parseFloat(limpiarLinea(p.row[7 + i]))
-            sub[i] = (Pinf - Pi) / (P0 - Pinf) 
+            sub[i] = (Pi - Pinf) / (P0 - Pinf) 
             datos[i] += sub[i]
         numdatos += 1
         todosdatos.add(sub)

@@ -26,6 +26,8 @@ sorting=ynt
 
 \usepackage[spanish]{babel}
 
+\hypersetup{colorlinks=true,linkcolor=blue, linktocpage}
+
 \title{Estudio del perfil NACA 1018}
 \author{José Antonio Mayo García}
 
@@ -326,6 +328,10 @@ $Var(\alpha)$ que tomamos para el desarrollo anterior en el código.
 
 \paragraph{Cálculo de $c_m$}
 
+Primero de todo, se ha considerado un momento como positivo si este hace que el perfil aumentar su ángulo de ataque.
+Además, según el enunciado, debemos calcular los momentos respecto al punto $x_c = \frac{1}{4}$. (X-Foil ya nos da 
+los datos respecto a este punto).
+
 
 \subsection{Implementación en Software}
 
@@ -336,17 +342,202 @@ de los gráficos.
 
 En todo momento se han utilizado números de punto flotante de 64 bits para la realización de los cálculos.
 
+\newpage
 \section{Resultados}
 
 \subsection{Exposición resultados}
 
-\subsection{Minimos cuadrados}
+\subsubsection{Gráficas \texorpdfstring{$c_P$}{presión} vs \texorpdfstring{$x_c$}{posición}}
 
+En las siguientes gráficas se presenta en negro los valores de $c_P$, en azul discontinuo los valores de estos 
+predecidos por X-Foil. En gris a puntos está la acotación de errores.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_350000_-2_extra.tex}}
+        \label{fig:res1}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_350000_-2_intra.tex}}
+        \label{fig:res2}    
+    \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_200000_0_extra.tex}}
+        \label{fig:res3}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_200000_0_intra.tex}}
+        \label{fig:res4}    
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_350000_6_extra.tex}}
+        \label{fig:res5}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_350000_6_intra.tex}}
+        \label{fig:res6}    
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_200000_14_extra.tex}}
+        \label{fig:res7}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/cP/cP_200000_14_intra.tex}}
+        \label{fig:res8}    
+    \end{subfigure}
+\end{figure}
+
+\subsubsection{Gráficas \texorpdfstring{$c_l$}{lift} vs \texorpdfstring{$\alpha$}{alpha}}
+
+Se utiliza el mismo código de colores que antes. Ahora, se presenta en línea roja contínua el ajuste de 
+mínimos cuadrados para cada respectiva función, y en línea verde a punto y raya la curva predecida por la 
+teoría potencial de perfiles finos.
+
+Para el ajuste de mínimos cuadrados se ha tomado la totalidad de la curva, ya que no es aparente la 
+aparición de una zona de pérdida como la que se puede ver en los datos del X-Foil. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/cL_200000.0.tex}}
+        \caption{Gráfica del $c_l$ a Reynolds 200000. }
+        \label{fig:res9}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/cL_350000.0.tex}}
+        \caption{Gráfica del $c_l$ a Reynolds 350000. }
+        \label{fig:res10}     
+    \end{subfigure}
+\end{figure}
+
+Para $Re = 200000$ tenemos el siguiente ajuste de mínimos cuadrados para el $c_l$:
+
+\input{../resultados/mincuadrados_cL_200000.0.tex}
+
+
+Para $Re = 350000$ tenemos el siguiente ajuste de mínimos cuadrados para el $c_l$:
+
+\input{../resultados/mincuadrados_cL_350000.0.tex}
+
+Estos resultados se comentan en \ref{discus}.
+
+\newpage
+\subsubsection{Gráficas \texorpdfstring{$c_d$}{drag} vs \texorpdfstring{$c_l$}{lift}}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/polar_200000.0.tex}}
+        \caption{Gráfica del $c_d$ a Reynolds 200000. }
+        \label{fig:res11}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/polar_350000.0.tex}}
+        \caption{Gráfica del $c_d$ a Reynolds 350000. }
+        \label{fig:res12}     
+    \end{subfigure}
+\end{figure}
+
+Para $Re = 200000$ tenemos el siguiente ajuste de mínimos cuadrados para el $c_d$:
+
+\input{../resultados/mincuadrados_polar_200000.0.tex}
+
+Para $Re = 350000$ tenemos el siguiente ajuste de mínimos cuadrados para el $c_d$:
+
+\input{../resultados/mincuadrados_polar_350000.0.tex}
+
+Estos resultados se comentan en \ref{discus}.
+
+\subsubsection{Gráficas \texorpdfstring{$c_{m,le}$}{momentos} vs \texorpdfstring{$x_c$}{posición}}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/cM_200000.0.tex}}
+        \caption{Gráfica del $c_{m}$ a Reynolds 200000. }
+        \label{fig:res13}    
+    \end{subfigure}
+    \hspace{0cm}
+    \begin{subfigure}{.48\textwidth}
+        \resizebox{\linewidth}{!}{\input{../resultados/clcD/cM_350000.0.tex}}
+        \caption{Gráfica del $c_{m}$ a Reynolds 350000. }
+        \label{fig:res14}     
+    \end{subfigure}
+\end{figure}
 \section{Discusión}
 
 \subsection{Eficiencias}
 
 \subsection{Análisis}
+
+\subsubsection{Sobre \texorpdfstring{$c_{p}$}{presiones}}
+
+Observamos en los gráficos de presión que los valores medidos se aproximan muy bien a los predecidos 
+por X-Foil. De todas formas, existen diferencias apreciables, que afectarán en gran medida a las curvas 
+de sustentación, drag y momentos debido a que las diferencias se acumulan a lo largo de la integración.
+
+
+\subsubsection{Sobre \texorpdfstring{$c_{l}$}{lift} y \texorpdfstring{$c_d$}{drag}}
+
+\label{discus}
+
+Es impactante la enorme diferencia que existe entre la curva calculada a partir de los datos experimentales, 
+y la predecida por X-Foil, o la predecida por la teoría de flujo potencial. Observamos en las figuras \ref{fig:res9} y 
+\ref{fig:res10} que la teoría de flujo potencial, y X-Foil (flujo con efectos viscosos) son muy similares 
+para $\alpha$ bajos. Por otra parte, los valores experimentales no coinciden con ninguno de los dos.
+
+Observamos que para el caso de la teoría potencial, y aproximadamente para los datos de X-Foil (¡Cuidado, estamos trabajando
+en grados!):
+
+$$\left. \frac{dc_l}{d\alpha} \right\rvert_{\text{ideal}} = 2\pi \text{rad}^{-1} \simeq 0.10966 \deg^{-1}$$
+
+Por otra parte, para los datos experimentales, desarrollando sobre el ajuste de mínimos cuadrados para los dos números de Reynolds estudiados:
+
+$$\left. \frac{dc_l}{d\alpha} \right\rvert_{\text{experimental}}  \simeq \begin{cases}
+    0.0580544 \deg^{-1} \simeq 1.059\pi \text{rad}^{-1} \\
+    0.0623392 \deg^{-1} \simeq 1.137\pi \text{rad}^{-1}
+\end{cases}
+$$
+
+Observamos que los valores experimentales son, aproximadamente, la mitad de los teóricos.
+
+En cuanto al drag, es mucho mayor en el caso experimental que los valores predecidos por X-Foil, incluso entrando
+en valores negativos, lo cual carece de sentido físico. (Figuras \ref{fig:res11},  \ref{fig:res12}).
+
+\subsubsection{Estabilidad (\texorpdfstring{$c_{m}$}{momentos})}
+
+Observamos que los coeficientes de momentos tampoco coinciden demasiado bien con los predecidos por X-Foil. De todas formas, 
+observamos que el perfil es estable para un rango grande de valores en el caso experimental. Observando en la figura \ref{fig:res13}
+para $\alpha < 0$, el momento también es negativo, luego el perfil tenderá a reducir su ángulo de ataque aún más.
+En el caso inverso, con $\alpha > 0$, existe un periodo de estabilidad que se mantiene hasta los $12\deg$. A velocidades 
+(número de Reynolds) mayores (figura \ref{fig:res14}), este rango de estabilidad se reduce.
+
+En el caso predecido por X-Foil, el perfil es mucho más inestable, aunque presenta una \say{isla de estabilidad}
+para $\alpha$ alrededor de $8\deg$.
+
+\subsubsection{Causa de estas disparidades}
+
+
 
 \subsection{Posibles mejoras}
 
@@ -359,22 +550,14 @@ los ángulos de ataque, que tienen una gran repercusión sobre la forma final de
 
 \section{Conclusiones}
 
-
-\subsection{Visión personal}
-
 El trabajo no solo ha servido como una primera experiencia con un túnel de viento, sino que ha sido una introducción al mundo
-de la investigación aeroespacial. En un primer lugar, se ha permitido una gran libertada la hora de realizar los cálculos. 
+de la investigación aeroespacial. En un primer lugar, se ha permitido una gran libertad a la hora de realizar los cálculos. 
 En parte, esta libertad ha creado una incertidumbre, que supongo estará también presente en la investigación real. Por otra parte,
 ha permitido explorar las diferentes herramientas disponibles para este tipo de trabajos. 
 
 También es importante añadir el choque que supone que los resultados experimentales coincidan muy mal con los resultados 
 teóricos ofrecidos por X-Foil. Esta diferencia hace muy clara la necesidad de túneles de viento ámplios, 
 además de un protocolo riguroso y estricto a la hora de preparar los experimentos y tomar los datos.
-
-%\input{../resultados/cP/cP_200000_10_extra.tex}
-%\input{../resultados/cP/cP_200000_10_intra.tex}
-%\input{../resultados/cLcD/cL_200000.0.tex}
-%\input{../resultados/cLcD/cD_200000.0.tex}
 
 \printbibliography
 

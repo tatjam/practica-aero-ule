@@ -28,24 +28,29 @@ for datosRe in datos:
         let dfextra = seqsToDf({"$x_c$": xc[0..14], "$c_p$": datosA.Datos[0..14],
         "$c_p^X$": datosA.XFOIL_Datos[0..14], "vars": sup[0..14], "vari": inf[0..14]})
     
+        var titulo = fmt"Extradós - Reynolds: {reInt}, $\alpha$: {aInt}º"
+
         ggplot(dfextra) + 
             geom_line(aes("$x_c$", "$c_p$")) + 
-            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5)) + 
-            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5)) + 
-            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
-            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
+            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5), lineType=ltDotted) + 
+            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5), lineType=ltDotted) + 
+            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255), lineType=ltDashed) + 
+            ggtitle(titulo) +
             ggsave(nameextra, onlyTikZ=true)
         
         let nameintra = fmt"resultados/cP/cP_{reInt}_{aInt}_intra.tex"
+
+        titulo = fmt"Intradós - Reynolds: {reInt}, $\alpha$: {aInt}º"
 
         let dfintra = seqsToDf({"$x_c$": xc[15..29], "$c_p$": datosA.Datos[15..29],
         "$c_p^X$": datosA.XFOIL_Datos[15..29], "vars": sup[15..29], "vari": inf[15..29]})
         
         ggplot(dfintra) + 
-            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5)) + 
-            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5)) + 
+            geom_line(aes("$x_c$", "vars"), color=color(0.5, 0.5, 0.5), lineType=ltDotted) + 
+            geom_line(aes("$x_c$", "vari"), color=color(0.5, 0.5, 0.5), lineType=ltDotted) + 
             geom_line(aes("$x_c$", "$c_p$")) + 
-            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255)) + 
+            geom_line(aes("$x_c$", "$c_p^X$"), color=color(0, 0, 255), lineType=ltDashed) + 
+            ggtitle(titulo) +
             ggsave(nameintra, onlyTikZ=true)
 
         
