@@ -39,7 +39,7 @@ sorting=ynt
 
 \section{Introducción}
 
-El ensayo mediante túneles de viento remonta a los origenes de la aviación, siendo su utilización fundamental para el diseño
+El ensayo mediante túneles de viento remonta a los orígenes de la aviación, siendo su utilización fundamental para el diseño
 y estudio de vehículos aéreos, y tremendamente útiles a la hora de estudiar el comportamiento aerodinámico de automóviles,
 edificios, o cualquier tipo de dispositivo en contacto con el aire. \cite{Barlow1999-wm}
 
@@ -50,7 +50,7 @@ edificios, o cualquier tipo de dispositivo en contacto con el aire. \cite{Barlow
 \subsection{Túnel de viento}
 
 Se utilizó un perfil elaborado en madera, en cuya superficie 30 orificios se conectaban, mediante tubos flexibles, 
-con el dispositivo \textit{DTC Initium}, ocupado de registrar las presiones. El perfil se situa sobre una plataforma giratoria que se 
+con el dispositivo \textit{DTC Initium}, ocupado de registrar las presiones. El perfil se sitúa sobre una plataforma giratoria que se 
 adaptó en el interior de la cámara de ensayo del túnel de viento mediante una abertura en la pared de este. Dentro de la cámara,
 alejado del perfil, se encuentra un tubo de pitot con dos tomas de presión adicionales.
 
@@ -82,7 +82,7 @@ copiaron manualmente los datos al fichero generado por \verb+CPWR+.
 \subsubsection{Perfil NACA}
 
 Primero de todo, definamos un sistema de coordenadas en el que trabajar. Denominaremos al eje $x$ el eje longitudinal
-del perfil, y al eje $y$ el perpendicular a este en dirección del extrados. Se define la cuerda $b$ como la longitud total
+del perfil, y al eje $y$ el perpendicular a este en dirección del extradós. Se define la cuerda $b$ como la longitud total
 de un perfil, y, con interés de adimensionalizar, definiremos $x_c = \frac{x}{b}$ y $y_c = \frac{y}{b}$.
 
 Un perfil cualquiera (siempre que sea una función con dos valores de $y$ para un $x$ dado), por lo tanto, se podrá definir 
@@ -97,7 +97,7 @@ NACA 0018, la línea de curvatura es nula, es decir, $c(x_c) = 0$, y por lo tant
 
 $$y_c = \pm t(x_c)$$
 
-Ahora, el tercer y cuarto dígitos del perfil NACA nos indica, en porcentaje, cual es el grosor máximo del perfil respecto
+Ahora, el tercer y cuarto dígitos del perfil NACA nos indican, en porcentaje, cual es el grosor máximo del perfil respecto
 a la cuerda. Finalmente, los perfiles NACA respetan la siguiente fórmula para $t(x_c)$, siendo $t_m$ los
 dos últimos dígitos del perfil NACA divididos entre $100$.
 
@@ -131,7 +131,7 @@ $P$ se obtendrá gracias a la media de las presiones medidas en cada punto del p
 \paragraph{Coeficientes de fuerzas netas}
 
 De los valores de presión podemos obtener la fuerza neta en los dos ejes fundamentales del perfil realizando una integral
-de linea a lo largo de la superficie del perfil. Siendo $\vec{dN}$ el vector normal al perfil en cada punto que apunta hacía
+de línea a lo largo de la superficie del perfil. Siendo $\vec{dN}$ el vector normal al perfil en cada punto que apunta hacia
 el exterior del perfil:
 
 $$\vec{F} = - \oint P(x, y) \vec{dN}$$ 
@@ -148,7 +148,7 @@ observar en la figura \ref{fig:NACA}
     \label{fig:NACA}    
 \end{figure}
 
-Asumiendo que la presión varia de forma lineal entre una toma y otra, podemos afirmar que en la mitad del segmento la presión 
+Asumiendo que la presión varía de forma lineal entre una toma y otra, podemos afirmar que en la mitad del segmento la presión 
 será: $P_{a, b} = \frac{1}{2}(P_{a} + P_{b})$. Ahora, podemos obtener el vector dirección de cada segmento de la 
 siguiente forma:
 
@@ -158,7 +158,7 @@ Por lo tanto, el vector normal será, siendo $S_x$ y $S_y$ las componentes respe
 
 $$\vec{N_{a, b}} = (-S_y, S_x)$$
 
-Observamos que para los segmentos del intradós el vector normal apunta hacía el interior del perfil. Este hecho se tendrá
+Observamos que para los segmentos del intradós el vector normal apunta hacia el interior del perfil. Este hecho se tendrá
 en cuenta a la hora de sumar las diferentes fuerzas resultantes. Además, se ha de tener cuidado en $i=16$, ya que existe 
 una \say{discontinuidad} entre intradós y extradós, del punto 15 al 16, ya que estos no están conectados (figura \ref{fig:NACA}). Por lo tanto:
 
@@ -352,7 +352,7 @@ c_x^2 \alpha^2 \left[\frac{Var(c_x)}{c_x^2} + \frac{Var(sin(\alpha))}{\alpha^2}\
 c_y^2 \left[\frac{Var(c_y)}{c_y^2} + \frac{Var(cos(\alpha))}{1}\right]
 $$
 
-Recordemos que estimamos que se cometió un error \say{maximo} de $1\deg$ a la hora de ajustar el ángulo de ataque. Consideremos 
+Recordemos que estimamos que se cometió un error \say{máximo} de $1\deg$ a la hora de ajustar el ángulo de ataque. Consideremos 
 que el ajuste de $\alpha$ sigue una distribución normal, y que hay un $95\%$ de probabilidades de que $\alpha$ no esté equivocado
 en más de $1\deg$: En este caso, sin entrar en el desarrollo matemático, 
 la desviación típica será de $0.5\deg$, por lo tanto la varianza de $\alpha$ será de $0.25\deg^2$. Este es el valor de 
@@ -616,11 +616,11 @@ La causa fundamental de estas grandes diferencias entre las predicciones de X-Fo
 que estamos trabajando en un túnel de viento.
 
 Primero de todo, el túnel de viento utilizado no presenta ningún dispositivo acondicionador del flujo. Por lo tanto, es de esperar
-que el flujo de aire sea relativamente inestable. En cuanto a la contracción previa a la cámara de ensayo, está podría tener 
+que el flujo de aire sea relativamente inestable. En cuanto a la contracción previa a la cámara de ensayo, esta podría tener 
 también un papel vital en las distorsiones que observamos. La contracción es vital a la hora de reducir las turbulencias 
 \cite{Derbunovich1987} y es posible que la de el túnel de viento no sea apropiada. 
 
-La abundancia de turbulencias en la cámara de ensayo parece alinearse con los resultados obtendidos. Por una parte, el perfil 
+La abundancia de turbulencias en la cámara de ensayo parece alinearse con los resultados obtenidos. Por una parte, el perfil 
 tarda mucho más en entrar en pérdida. De hecho, en el ensayo, no es fácil determinar un punto exacto en el que el perfil esté 
 entrando en pérdida (figura \ref{fig:res9}, \ref{fig:res10}). La turbulencia, por lo general, es capaz de retrasar la separación 
 de la capa límite, lo que podría explicar porque no observamos este fenómeno en el ensayo. A su vez, una capa límite turbulenta suele 
@@ -637,17 +637,17 @@ con el ensayo (figuras de \ref{cp} como ejemplos).
 Por otra parte, en la cámara de ensayo también debemos ser muy cuidadosos. La cuerda no debería ser superior a 
 $\frac{1}{3}$ de la altura de la cámara \cite{Barlow1999-wm}. Aunque no se tienen medidas exactas, 
 parece ser que la cuerda es menor a este valor. 
-Por otra parte, para evitar el bloqueo de la corriente, el objeto de ensayo debe ser alrededor de un $5\%$ del area 
+Por otra parte, para evitar el bloqueo de la corriente, el objeto de ensayo debe ser alrededor de un $5\%$ del área 
 de la cámara de ensayo \cite{Barlow1999-wm}. Es posible que se supere este valor, lo que podría dar lugar a alguna interferencia.
 
-De todas formas, sin llevar a cabo un ensayo más detallado tan solo es puede especular sobre el origen de estos errores.
+De todas formas, sin llevar a cabo un ensayo más detallado tan solo se puede especular sobre el origen de estos errores.
 
 \subsection{Posibles mejoras}
 
 Una de las partes más débiles del trabajo es el cálculo de errores. Se trata de un temario en el que nunca hemos entrado 
 en detalle. Se observa que los errores son enormes para todas 
 las gráficas excepto las de $c_p$. Por una parte, esto parece tener sentido ya que se están propagando gran cantidad de errores,
-pero estos errores aparentemente son demasiado grandes. Es posible que exista algún error teórico que esta causando este problema.
+pero estos errores aparentemente son demasiado grandes. Es posible que exista algún error teórico que está causando este problema.
 
 Sí se repitiese el experimento, sería fundamental ser mucho más cuidadoso a la hora de ajustar 
 los ángulos de ataque, que tienen una gran repercusión sobre la forma final de las curvas y sobre el error final. 
